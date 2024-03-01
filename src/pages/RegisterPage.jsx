@@ -1,4 +1,4 @@
-import { AccountCircle } from "@mui/icons-material";
+import { AccountCircle, Visibility } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EmailIcon from "@mui/icons-material/Email";
@@ -31,6 +31,31 @@ export default function RegisterPage() {
       elm.id === input.id ? updatedInput : elm
     );
     setInputs(updatedInputs);
+  };
+  const showMap = {
+    text: <VisibilityOffIcon />,
+    password: <VisibilityIcon />,
+  };
+  const changeShowAndChangeType = (event, input) => {
+    const inputType = input.type;
+    let updatedInput = input;
+    if (inputType == "text") {
+      updatedInput = {
+        ...input,
+        endIconButton: showMap["password"],
+        type: "password",
+      };
+    } else {
+      console.log("yes2");
+      updatedInput = {
+        ...input,
+        endIconButton: showMap["text"],
+        type: "text",
+      };
+    }
+    setInputs((prev) =>
+      prev.map((elm) => (elm.id === input.id ? updatedInput : elm))
+    );
   };
   const [inputs, setInputs] = useState([
     {
@@ -156,7 +181,13 @@ export default function RegisterPage() {
                         ),
                         endAdornment: elm.endIconButton && (
                           <InputAdornment position="end">
-                            <IconButton>{elm.endIconButton}</IconButton>
+                            <IconButton
+                              onClick={(event) =>
+                                changeShowAndChangeType(event, elm)
+                              }
+                            >
+                              {elm.endIconButton}
+                            </IconButton>
                           </InputAdornment>
                         ),
                       }}
@@ -166,7 +197,12 @@ export default function RegisterPage() {
               </>
             ))}
             <Grid item xs={12}>
-              <Button color="primary" variant="contained" fullWidth={true}>
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                fullWidth={true}
+              >
                 Sign up
               </Button>
             </Grid>
