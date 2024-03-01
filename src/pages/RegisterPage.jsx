@@ -47,6 +47,11 @@ export default function RegisterPage() {
     roadName: "",
     houseNumber: "",
   });
+
+  const registerUser = (event) => {
+    event.preventDefault();
+    console.log(userInfo);
+  };
   // inputs state for the inputs in the page used for the validation and the rendering
   const inputs = [
     {
@@ -94,6 +99,7 @@ export default function RegisterPage() {
       type: "text",
       pattern: `^[A-Za-z]+$`,
       label: "First name",
+      name: "firstName",
       required: true,
       errorFunction: (value) => nameStringValidation(value),
       startIcon: <DriveFileRenameOutlineIcon />,
@@ -176,6 +182,7 @@ export default function RegisterPage() {
             backgroundColor: "rgba(250,250,250,0.7)",
             overflow: "scroll",
           }}
+          onSubmit={registerUser}
         >
           <Typography variant="h4" align="center">
             Register page
@@ -194,7 +201,13 @@ export default function RegisterPage() {
                 justifyContent={"center"}
               >
                 {" "}
-                <InputFormField {...elm} userPassword={userInfo.password} />
+                <InputFormField
+                  params={elm}
+                  userPassword={userInfo.password}
+                  sendUpdatedValues={(value) =>
+                    setUserInfo((prev) => ({ ...prev, ...value }))
+                  }
+                />
               </Grid>
             ))}
             <Grid item xs={12}>

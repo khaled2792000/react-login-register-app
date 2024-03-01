@@ -9,16 +9,29 @@ import React, { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
-export default function InputFormField(
+export default function InputFormField({
   params,
   sendUpdatedValues,
-  userPassword
-) {
+  userPassword,
+}) {
   const [fieldState, setFieldState] = useState(params);
   const handleOnChange = (event, input) => {
-    // sendUpdatedValues({ [input.name]: event.target.value });
+    sendUpdatedValues({ [input.name]: event.target.value });
     if (input.errorFunction) {
       const message = input.errorFunction(event.target.value, userPassword);
+      // Update the specific input field if the function gets one par it will not crash it fixed for checking the password confirmation
+      const updatedInput = {
+        ...input,
+        errorMessage: message,
+      };
+      setFieldState(updatedInput);
+      event.target.setCustomValidity(message == " " ? "" : message);
+    }
+  };
+  const handleOnChangeAutoComplete = (event, value, input) => {
+    sendUpdatedValues({ [input.name]: value });
+    if (input.errorFunction) {
+      const message = input.errorFunction(value, userPassword);
       // Update the specific input field if the function gets one par it will not crash it fixed for checking the password confirmation
       const updatedInput = {
         ...input,
@@ -55,6 +68,9 @@ export default function InputFormField(
           fullWidth={true}
           id={fieldState.name}
           options={fieldState.autoCompleteList}
+          onChange={(event, value) =>
+            handleOnChangeAutoComplete(event, value, fieldState)
+          }
           renderInput={(params) => (
             <TextField
               {...params}
