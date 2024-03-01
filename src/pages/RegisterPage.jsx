@@ -1,4 +1,3 @@
-import { AccountCircle, Balance, Visibility } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EmailIcon from "@mui/icons-material/Email";
@@ -21,17 +20,159 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import {
+  JustPositiveNumber,
+  ageRangeValidation,
+  confirmPasswordValidList,
+  emailValidation,
+  hebrewValidation,
+  nameStringValidation,
+  passwordValidation,
+  userNameValidation,
+} from "../utils/validatoin";
 
 // handel the register form submit event
 export default function RegisterPage() {
+  const [userInfo, setUserInfo] = useState({
+    username: "",
+    email: "",
+    birthday: "",
+    password: "",
+    confirmPassword: "",
+    userImage: "",
+    firstName: "",
+    lastName: "",
+    city: "",
+    roadName: "",
+    houseNumber: "",
+  });
+  // inputs state for the inputs in the page used for the validation and the rendering
+  const [inputs, setInputs] = useState([
+    {
+      id: 1,
+      label: "Username",
+      name: "username",
+      type: "text",
+      pattern: "^[A-Za-z0-9]{3,16}$",
+      required: true,
+      errorFunction: (value) => userNameValidation(value),
+      startIcon: <PersonIcon />,
+    },
+    {
+      id: 2,
+      name: "password",
+      type: "password",
+      label: "Password",
+      pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+      required: true,
+      errorFunction: (value) => passwordValidation(value),
+      startIcon: <VpnKeyIcon />,
+      endIconButton: <VisibilityIcon />,
+    },
+    {
+      id: 3,
+      name: "confirmPassword",
+      type: "password",
+      label: "Confirm Password",
+      required: true,
+      errorFunction: (value1, value2) =>
+        confirmPasswordValidList(value1, value2),
+      startIcon: <VpnKeyIcon />,
+      endIconButton: <VisibilityIcon />,
+    },
+    {
+      id: 4,
+      name: "userImage",
+      type: "file",
+      accept: "image/jpg,image/jpeg",
+      label: "Upload your Image",
+      startIcon: " ",
+    },
+    {
+      id: 5,
+      type: "text",
+      pattern: `^[A-Za-z]+$`,
+      label: "First name",
+      required: true,
+      errorFunction: (value) => nameStringValidation(value),
+      startIcon: <DriveFileRenameOutlineIcon />,
+      haveFile: false,
+    },
+    {
+      id: 6,
+      name: "lastName",
+      type: "text",
+      pattern: `^[A-Za-z]+$`,
+      label: "Last name",
+      errorFunction: (value) => nameStringValidation(value),
+      startIcon: <DriveFileRenameOutlineIcon />,
+      required: true,
+    },
+    {
+      id: 7,
+      name: "email",
+      type: "email",
+      label: "Email",
+      required: true,
+      errorFunction: (value) => emailValidation(value),
+      startIcon: <EmailIcon />,
+    },
+    {
+      id: 8,
+      name: "birthday",
+      type: "date",
+      label: "Birthday",
+      errorFunction: (value) => ageRangeValidation(value),
+      startIcon: <CakeIcon />,
+    },
+    {
+      id: 9,
+      name: "city",
+      type: "text",
+      label: "City",
+      autoCompleteList: ["גת", "באקה", "חדרה", "חריש", "חיפה"],
+      listId: "cites",
+      startIcon: <ApartmentIcon />,
+    },
+    {
+      id: 10,
+      name: "roadName",
+      type: "text",
+      label: "Road Name",
+      errorFunction: (value) => hebrewValidation(value),
+      startIcon: <EditRoadIcon />,
+    },
+    {
+      id: 11,
+      name: "houseNumber",
+      type: "number",
+      label: "HouseNumber",
+      pattern: "^\\d*$",
+      errorFunction: (value) => JustPositiveNumber(value),
+      required: true,
+      startIcon: <HomeIcon />,
+    },
+  ]);
+
   const handleOnChange = (event, input) => {
-    // Update the specific input field
-    const updatedInput = { ...input, error: true };
-    // update the inputs list
-    const updatedInputs = inputs.map((elm) =>
-      elm.id === input.id ? updatedInput : elm
-    );
-    setInputs(updatedInputs);
+    setUserInfo((prev) => ({ ...prev, [input.name]: event.target.value }));
+    if (input.errorFunction) {
+      const message = input.errorFunction(
+        event.target.value,
+        userInfo.password
+      );
+      // Update the specific input field if the function gets one par it will not crash it fixed for checking the password confirmation
+      const updatedInput = {
+        ...input,
+        errorMessage: message,
+      };
+      // update the inputs list
+      const updatedInputs = inputs.map((elm) =>
+        elm.id === input.id ? updatedInput : elm
+      );
+      event.target.setCustomValidity(message == " " ? "" : message);
+      setInputs(updatedInputs);
+    }
   };
   // object holds the password icon status
   const showMap = {
@@ -52,102 +193,6 @@ export default function RegisterPage() {
     );
   };
 
-  const [inputs, setInputs] = useState([
-    {
-      id: 1,
-      label: "Username",
-      name: "username",
-      type: "text",
-      pattern: "^[A-Za-z0-9]{3,16}$",
-      required: true,
-      startIcon: <PersonIcon />,
-    },
-    {
-      id: 2,
-      name: "password",
-      type: "password",
-      label: "Password",
-      pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
-      required: true,
-      startIcon: <VpnKeyIcon />,
-      endIconButton: <VisibilityIcon />,
-    },
-    {
-      id: 3,
-      name: "confirmPassword",
-      type: "password",
-      label: "Confirm Password",
-      required: true,
-      startIcon: <VpnKeyIcon />,
-      endIconButton: <VisibilityIcon />,
-    },
-    {
-      id: 4,
-      name: "userImage",
-      type: "file",
-      accept: "image/jpg,image/jpeg",
-      label: "Upload your Image",
-      startIcon: " ",
-    },
-    {
-      id: 5,
-      type: "text",
-      pattern: `^[A-Za-z]+$`,
-      label: "First name",
-      required: true,
-      startIcon: <DriveFileRenameOutlineIcon />,
-      haveFile: false,
-    },
-    {
-      id: 6,
-      name: "lastName",
-      type: "text",
-      pattern: `^[A-Za-z]+$`,
-      label: "Last name",
-      startIcon: <DriveFileRenameOutlineIcon />,
-      required: true,
-    },
-    {
-      id: 7,
-      name: "email",
-      type: "email",
-      label: "Email",
-      required: true,
-      startIcon: <EmailIcon />,
-    },
-    {
-      id: 8,
-      name: "birthday",
-      type: "date",
-      label: "Birthday",
-      startIcon: <CakeIcon />,
-    },
-    {
-      id: 9,
-      name: "city",
-      type: "text",
-      label: "City",
-      autoCompleteList: ["khaled", "khalaf"],
-      listId: "cites",
-      startIcon: <ApartmentIcon />,
-    },
-    {
-      id: 10,
-      name: "roadName",
-      type: "text",
-      label: "Road Name",
-      startIcon: <EditRoadIcon />,
-    },
-    {
-      id: 11,
-      name: "houseNumber",
-      type: "number",
-      label: "HouseNumber",
-      pattern: "^\\d*$",
-      required: true,
-      startIcon: <HomeIcon />,
-    },
-  ]);
   return (
     <>
       <Box
@@ -187,7 +232,6 @@ export default function RegisterPage() {
                 justifyContent={"center"}
               >
                 {" "}
-                {/* Move the key to the Grid item */}
                 <FormControl fullWidth={true} variant="outlined">
                   <label htmlFor={elm.name} style={{ padding: " 5px 0 " }}>
                     {elm.label}
@@ -201,7 +245,11 @@ export default function RegisterPage() {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          error={elm.error ?? false}
+                          error={
+                            elm.errorMessage == " " || elm.errorMessage == null
+                              ? false
+                              : true
+                          }
                           required={elm.required}
                           onChange={(event) => handleOnChange(event, elm)}
                           placeholder={elm.label}
@@ -213,12 +261,16 @@ export default function RegisterPage() {
                     <>
                       <TextField
                         id={elm.name}
-                        error={elm.error ?? false}
+                        error={
+                          elm.errorMessage == " " || elm.errorMessage == null
+                            ? false
+                            : true
+                        }
                         required={elm.required}
                         onChange={(event) => handleOnChange(event, elm)}
                         type={elm.type}
                         variant="outlined"
-                        helperText={elm.error ? elm.errorMessage : " "}
+                        helperText={elm.errorMessage ?? " "}
                         placeholder={elm.label}
                         InputProps={{
                           endAdornment: elm.endIconButton && (
