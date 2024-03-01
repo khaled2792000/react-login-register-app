@@ -17,12 +17,12 @@ import {
   Grid,
   IconButton,
   InputAdornment,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 
+// handel the register form submit event
 export default function RegisterPage() {
   const handleOnChange = (event, input) => {
     // Update the specific input field
@@ -33,31 +33,25 @@ export default function RegisterPage() {
     );
     setInputs(updatedInputs);
   };
+  // object holds the password icon status
   const showMap = {
     text: <VisibilityOffIcon />,
     password: <VisibilityIcon />,
   };
+  // function to change the password status when click the eye
   const changeShowAndChangeType = (event, input) => {
     const inputType = input.type;
-    let updatedInput = input;
-    if (inputType == "text") {
-      updatedInput = {
-        ...input,
-        endIconButton: showMap["password"],
-        type: "password",
-      };
-    } else {
-      console.log("yes2");
-      updatedInput = {
-        ...input,
-        endIconButton: showMap["text"],
-        type: "text",
-      };
-    }
+    const isItText = inputType == "text";
+    const updatedInput = {
+      ...input,
+      endIconButton: showMap[isItText ? "password" : "text"],
+      type: isItText ? "password" : "text",
+    };
     setInputs((prev) =>
       prev.map((elm) => (elm.id === input.id ? updatedInput : elm))
     );
   };
+
   const [inputs, setInputs] = useState([
     {
       id: 1,
@@ -102,6 +96,7 @@ export default function RegisterPage() {
       label: "First name",
       required: true,
       startIcon: <DriveFileRenameOutlineIcon />,
+      haveFile: false,
     },
     {
       id: 6,
@@ -167,11 +162,12 @@ export default function RegisterPage() {
         <form
           action=""
           style={{
-            width: "500px",
+            width: "800px",
             boxShadow: "0 0 10px black",
             padding: "50px",
             borderRadius: "5px",
             backgroundColor: "rgba(250,250,250,0.7)",
+            overflow: "scroll",
           }}
         >
           <Typography variant="h4" align="center">
@@ -181,12 +177,25 @@ export default function RegisterPage() {
           <br />
           <Grid container spacing={2}>
             {inputs.map((elm) => (
-              <Grid item xs={6} key={elm.id}>
+              <Grid
+                item
+                xs={12}
+                md={4}
+                key={elm.id}
+                flex={true}
+                flexDirection={"column"}
+                justifyContent={"center"}
+              >
                 {" "}
                 {/* Move the key to the Grid item */}
                 <FormControl fullWidth={true} variant="outlined">
+                  <label htmlFor={elm.name} style={{ padding: " 5px 0 " }}>
+                    {elm.label}
+                    {elm.required && "*"}
+                  </label>
                   {elm.autoCompleteList ? (
                     <Autocomplete
+                      fullWidth={true}
                       id={elm.name}
                       options={elm.autoCompleteList}
                       renderInput={(params) => (
@@ -196,38 +205,36 @@ export default function RegisterPage() {
                           required={elm.required}
                           onChange={(event) => handleOnChange(event, elm)}
                           placeholder={elm.label}
+                          fullWidth={true}
                         />
                       )}
                     />
                   ) : (
-                    <TextField
-                      label={elm.label}
-                      error={elm.error ?? false}
-                      required={elm.required}
-                      onChange={(event) => handleOnChange(event, elm)}
-                      type={elm.type}
-                      variant="outlined"
-                      helperText={elm.error ? "there an error" : " "}
-                      placeholder={elm.label}
-                      InputProps={{
-                        startAdornment: elm.startIcon && (
-                          <InputAdornment position="start">
-                            {elm.startIcon}
-                          </InputAdornment>
-                        ),
-                        endAdornment: elm.endIconButton && (
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={(event) =>
-                                changeShowAndChangeType(event, elm)
-                              }
-                            >
-                              {elm.endIconButton}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
+                    <>
+                      <TextField
+                        id={elm.name}
+                        error={elm.error ?? false}
+                        required={elm.required}
+                        onChange={(event) => handleOnChange(event, elm)}
+                        type={elm.type}
+                        variant="outlined"
+                        helperText={elm.error ? elm.errorMessage : " "}
+                        placeholder={elm.label}
+                        InputProps={{
+                          endAdornment: elm.endIconButton && (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={(event) =>
+                                  changeShowAndChangeType(event, elm)
+                                }
+                              >
+                                {elm.endIconButton}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </>
                   )}
                 </FormControl>
               </Grid>

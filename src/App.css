@@ -9,3 +9,21 @@ body {
   background-attachment: fixed;
   background-size: cover;
 }
+
+input[type=file]::file-selector-button {
+  border: none;
+  background-color: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  color: #0d45a5;
+}
+
+input[type=file] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
