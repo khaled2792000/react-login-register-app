@@ -30,6 +30,7 @@ import {
   passwordValidation,
   userNameValidation,
 } from "../utils/validatoin";
+import InputFormField from "../components/InputFormField";
 
 // handel the register form submit event
 export default function RegisterPage() {
@@ -47,7 +48,7 @@ export default function RegisterPage() {
     houseNumber: "",
   });
   // inputs state for the inputs in the page used for the validation and the rendering
-  const [inputs, setInputs] = useState([
+  const inputs = [
     {
       id: 1,
       label: "Username",
@@ -152,46 +153,7 @@ export default function RegisterPage() {
       required: true,
       startIcon: <HomeIcon />,
     },
-  ]);
-
-  const handleOnChange = (event, input) => {
-    setUserInfo((prev) => ({ ...prev, [input.name]: event.target.value }));
-    if (input.errorFunction) {
-      const message = input.errorFunction(
-        event.target.value,
-        userInfo.password
-      );
-      // Update the specific input field if the function gets one par it will not crash it fixed for checking the password confirmation
-      const updatedInput = {
-        ...input,
-        errorMessage: message,
-      };
-      // update the inputs list
-      const updatedInputs = inputs.map((elm) =>
-        elm.id === input.id ? updatedInput : elm
-      );
-      event.target.setCustomValidity(message == " " ? "" : message);
-      setInputs(updatedInputs);
-    }
-  };
-  // object holds the password icon status
-  const showMap = {
-    text: <VisibilityOffIcon />,
-    password: <VisibilityIcon />,
-  };
-  // function to change the password status when click the eye
-  const changeShowAndChangeType = (event, input) => {
-    const inputType = input.type;
-    const isItText = inputType == "text";
-    const updatedInput = {
-      ...input,
-      endIconButton: showMap[isItText ? "password" : "text"],
-      type: isItText ? "password" : "text",
-    };
-    setInputs((prev) =>
-      prev.map((elm) => (elm.id === input.id ? updatedInput : elm))
-    );
-  };
+  ];
 
   return (
     <>
@@ -232,63 +194,7 @@ export default function RegisterPage() {
                 justifyContent={"center"}
               >
                 {" "}
-                <FormControl fullWidth={true} variant="outlined">
-                  <label htmlFor={elm.name} style={{ padding: " 5px 0 " }}>
-                    {elm.label}
-                    {elm.required && "*"}
-                  </label>
-                  {elm.autoCompleteList ? (
-                    <Autocomplete
-                      fullWidth={true}
-                      id={elm.name}
-                      options={elm.autoCompleteList}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          error={
-                            elm.errorMessage == " " || elm.errorMessage == null
-                              ? false
-                              : true
-                          }
-                          required={elm.required}
-                          onChange={(event) => handleOnChange(event, elm)}
-                          placeholder={elm.label}
-                          fullWidth={true}
-                        />
-                      )}
-                    />
-                  ) : (
-                    <>
-                      <TextField
-                        id={elm.name}
-                        error={
-                          elm.errorMessage == " " || elm.errorMessage == null
-                            ? false
-                            : true
-                        }
-                        required={elm.required}
-                        onChange={(event) => handleOnChange(event, elm)}
-                        type={elm.type}
-                        variant="outlined"
-                        helperText={elm.errorMessage ?? " "}
-                        placeholder={elm.label}
-                        InputProps={{
-                          endAdornment: elm.endIconButton && (
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={(event) =>
-                                  changeShowAndChangeType(event, elm)
-                                }
-                              >
-                                {elm.endIconButton}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </>
-                  )}
-                </FormControl>
+                <InputFormField {...elm} userPassword={userInfo.password} />
               </Grid>
             ))}
             <Grid item xs={12}>
