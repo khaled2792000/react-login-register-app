@@ -1,4 +1,4 @@
-import { AccountCircle, Visibility } from "@mui/icons-material";
+import { AccountCircle, Balance, Visibility } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EmailIcon from "@mui/icons-material/Email";
@@ -10,6 +10,7 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import {
+  Autocomplete,
   Box,
   Button,
   FormControl,
@@ -131,6 +132,7 @@ export default function RegisterPage() {
       name: "city",
       type: "text",
       label: "City",
+      autoCompleteList: ["khaled", "khalaf"],
       listId: "cites",
       startIcon: <ApartmentIcon />,
     },
@@ -153,17 +155,51 @@ export default function RegisterPage() {
   ]);
   return (
     <>
-      <Box width={560}>
-        <form action="">
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <form
+          action=""
+          style={{
+            width: "500px",
+            boxShadow: "0 0 10px black",
+            padding: "50px",
+            borderRadius: "5px",
+            backgroundColor: "rgba(250,250,250,0.7)",
+          }}
+        >
           <Typography variant="h4" align="center">
             Register page
           </Typography>
           <br />
+          <br />
           <Grid container spacing={2}>
             {inputs.map((elm) => (
-              <>
-                <Grid item xs={12} sm={6} md={6}>
-                  <FormControl fullWidth={true} variant="outlined" key={elm.id}>
+              <Grid item xs={6} key={elm.id}>
+                {" "}
+                {/* Move the key to the Grid item */}
+                <FormControl fullWidth={true} variant="outlined">
+                  {elm.autoCompleteList ? (
+                    <Autocomplete
+                      id={elm.name}
+                      options={elm.autoCompleteList}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={elm.error ?? false}
+                          required={elm.required}
+                          onChange={(event) => handleOnChange(event, elm)}
+                          placeholder={elm.label}
+                        />
+                      )}
+                    />
+                  ) : (
                     <TextField
                       label={elm.label}
                       error={elm.error ?? false}
@@ -192,9 +228,9 @@ export default function RegisterPage() {
                         ),
                       }}
                     />
-                  </FormControl>
-                </Grid>
-              </>
+                  )}
+                </FormControl>
+              </Grid>
             ))}
             <Grid item xs={12}>
               <Button
@@ -205,6 +241,18 @@ export default function RegisterPage() {
               >
                 Sign up
               </Button>
+              <Typography variant="caption">
+                I have an account{" "}
+                <span
+                  style={{
+                    color: "#1976d2",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                >
+                  Sign in
+                </span>
+              </Typography>
             </Grid>
           </Grid>
         </form>
