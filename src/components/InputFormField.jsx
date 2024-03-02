@@ -13,25 +13,34 @@ export default function InputFormField({
   params,
   sendUpdatedValues,
   userPassword,
+  errorFunction,
 }) {
   const [fieldState, setFieldState] = useState(params);
+  const [isAdmin, setIsAdmin] = useState(false);
   const handleOnChange = (event, input) => {
     sendUpdatedValues({ [input.name]: event.target.value });
-    if (input.errorFunction) {
-      const message = input.errorFunction(event.target.value, userPassword);
+    if (errorFunction) {
+      const message = errorFunction(event.target.value, userPassword);
       // Update the specific input field if the function gets one par it will not crash it fixed for checking the password confirmation
       const updatedInput = {
         ...input,
         errorMessage: message,
       };
       setFieldState(updatedInput);
-      event.target.setCustomValidity(message == " " ? "" : message);
+      event.target.setCustomValidity(message === " " ? "" : message);
+    } else {
+      event.target.setCustomValidity("");
+      setFieldState({
+        ...input,
+        errorMessage: null,
+      });
     }
   };
+
   const handleOnChangeAutoComplete = (event, value, input) => {
     sendUpdatedValues({ [input.name]: value });
-    if (input.errorFunction) {
-      const message = input.errorFunction(value, userPassword);
+    if (errorFunction) {
+      const message = errorFunction(value, userPassword);
       // Update the specific input field if the function gets one par it will not crash it fixed for checking the password confirmation
       const updatedInput = {
         ...input,
@@ -39,6 +48,12 @@ export default function InputFormField({
       };
       setFieldState(updatedInput);
       event.target.setCustomValidity(message == " " ? "" : message);
+    } else {
+      event.target.setCustomValidity("");
+      setFieldState({
+        ...input,
+        errorMessage: null,
+      });
     }
   };
   // object holds the password icon status
@@ -98,6 +113,7 @@ export default function InputFormField({
             }
             required={fieldState.required}
             onChange={(event) => handleOnChange(event, fieldState)}
+            onFocus={(event) => handleOnChange(event, fieldState)}
             type={fieldState.type}
             variant="outlined"
             helperText={fieldState.errorMessage ?? " "}

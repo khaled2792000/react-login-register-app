@@ -19,7 +19,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   JustPositiveNumber,
   ageRangeValidation,
@@ -31,9 +31,12 @@ import {
   userNameValidation,
 } from "../utils/validatoin";
 import InputFormField from "../components/InputFormField";
+import { showContext } from "../App";
+import { add_user_to_local_storage } from "../utils/addUserToLocalSorage";
 
 // handel the register form submit event
 export default function RegisterPage() {
+  const setShowPage = useContext(showContext);
   const [userInfo, setUserInfo] = useState({
     username: "",
     email: "",
@@ -50,7 +53,13 @@ export default function RegisterPage() {
 
   const registerUser = (event) => {
     event.preventDefault();
-    console.log(userInfo);
+    try {
+      add_user_to_local_storage(userInfo);
+      setShowPage("login");
+      event.target.clear();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   // inputs state for the inputs in the page used for the validation and the rendering
   const inputs = [
@@ -180,7 +189,6 @@ export default function RegisterPage() {
             padding: "50px",
             borderRadius: "5px",
             backgroundColor: "rgba(250,250,250,0.7)",
-            overflow: "scroll",
           }}
           onSubmit={registerUser}
         >
@@ -203,6 +211,7 @@ export default function RegisterPage() {
                 {" "}
                 <InputFormField
                   params={elm}
+                  errorFunction={elm.errorFunction}
                   userPassword={userInfo.password}
                   sendUpdatedValues={(value) =>
                     setUserInfo((prev) => ({ ...prev, ...value }))
@@ -227,6 +236,7 @@ export default function RegisterPage() {
                     textDecoration: "underline",
                     cursor: "pointer",
                   }}
+                  onClick={() => setShowPage("login")}
                 >
                   Sign in
                 </span>
