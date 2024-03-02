@@ -28,7 +28,7 @@ function App() {
       <showContext.Provider value={setShowPage}>
         {showPage === "register" && <RegisterPage />}
         {showPage === "login" && <LoginPage />}
-        {/* {showPage === "profile" && <Profile />} */}
+        {showPage === "profile" && <Profile />}
       </showContext.Provider>
     </>
   );
