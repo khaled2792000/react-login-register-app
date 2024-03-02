@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
-import RegisterPage from "./pages/RegisterPage";
+import RegisterPage from "./pages/Register";
 import "./App.css";
-import LoginPage from "./pages/LoginPage";
+import LoginPage from "./pages/Login";
 import Profile from "./pages/loged-in/Profile";
 export const showContext = createContext();
 

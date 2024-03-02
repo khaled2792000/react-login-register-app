@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableHead,
@@ -15,7 +15,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { loadUsers, showContext } from "../../App";
+import { loadUsers } from "../../App";
 import EditDetails from "./EditDetails";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";

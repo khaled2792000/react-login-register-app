@@ -10,18 +10,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import {
-  Autocomplete,
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-} from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import React, { useState } from "react";
 import {
   JustPositiveNumber,
   ageRangeValidation,
