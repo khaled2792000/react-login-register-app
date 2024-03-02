@@ -2,16 +2,25 @@ import React, { createContext, useEffect, useState } from "react";
 import RegisterPage from "./pages/RegisterPage";
 import "./App.css";
 import LoginPage from "./pages/LoginPage";
+import Profile from "./pages/loged-in/Profile";
 export const showContext = createContext();
+
+// function that get he users array from the local storage if there are not users then return empty array
+export const loadUsers = () => {
+  const loadData = localStorage.getItem("users");
+  const users =
+    loadData &&
+    JSON.parse(loadData.length == 0 ? [] : localStorage.getItem("users"));
+  return users;
+};
 
 function App() {
   const [showPage, setShowPage] = useState("login");
+
   useEffect(() => {
+    // clear the session storage
     // sessionStorage.clear();
-    const loadData = localStorage.getItem("users");
-    const users =
-      loadData &&
-      JSON.parse(loadData.length == 0 ? [] : localStorage.getItem("users"));
+    const users = loadUsers();
     (users == null || users.length == 0) &&
       localStorage.setItem(
         "users",

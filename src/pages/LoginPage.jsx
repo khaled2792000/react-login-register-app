@@ -6,7 +6,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { passwordValidation, userNameValidation } from "../utils/validatoin";
 import InputFormField from "../components/InputFormField";
 import { showContext } from "../App";
-import { add_user_to_local_storage } from "../utils/addUserToLocalSorage";
 import { load_user_session } from "../utils/loadUserSesion";
 
 export default function LoginPage() {
@@ -16,7 +15,7 @@ export default function LoginPage() {
     email: "",
   });
 
-  const registerUser = (event) => {
+  const loginUser = (event) => {
     event.preventDefault();
     try {
       load_user_session(userInfo);
@@ -69,7 +68,7 @@ export default function LoginPage() {
             borderRadius: "5px",
             backgroundColor: "rgba(250,250,250,0.7)",
           }}
-          onSubmit={registerUser}
+          onSubmit={loginUser}
         >
           <Typography variant="h4" align="center">
             Login page

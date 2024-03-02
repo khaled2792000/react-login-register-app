@@ -14,6 +14,7 @@ export default function InputFormField({
   sendUpdatedValues,
   userPassword,
   errorFunction,
+  userToEdit,
 }) {
   const [fieldState, setFieldState] = useState(params);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -39,6 +40,7 @@ export default function InputFormField({
 
   const handleOnChangeAutoComplete = (event, value, input) => {
     sendUpdatedValues({ [input.name]: value });
+    console.log(event.target);
     if (errorFunction) {
       const message = errorFunction(value, userPassword);
       // Update the specific input field if the function gets one par it will not crash it fixed for checking the password confirmation
@@ -47,9 +49,9 @@ export default function InputFormField({
         errorMessage: message,
       };
       setFieldState(updatedInput);
-      event.target.setCustomValidity(message == " " ? "" : message);
+      // event.target.setCustomValidity(message == " " ? "" : message);
     } else {
-      event.target.setCustomValidity("");
+      // event.target.setCustomValidity("");
       setFieldState({
         ...input,
         errorMessage: null,
@@ -99,6 +101,7 @@ export default function InputFormField({
               onChange={(event) => handleOnChange(event, fieldState)}
               placeholder={fieldState.label}
               fullWidth={true}
+              defaultValue={userToEdit && userToEdit[fieldState.name]}
             />
           )}
         />
@@ -118,6 +121,7 @@ export default function InputFormField({
             variant="outlined"
             helperText={fieldState.errorMessage ?? " "}
             placeholder={fieldState.label}
+            defaultValue={userToEdit && userToEdit[fieldState.name]}
             InputProps={{
               endAdornment: fieldState.endIconButton && (
                 <InputAdornment position="end">

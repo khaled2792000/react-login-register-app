@@ -19,7 +19,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   JustPositiveNumber,
   ageRangeValidation,
@@ -29,34 +29,20 @@ import {
   nameStringValidation,
   passwordValidation,
   userNameValidation,
-} from "../utils/validatoin";
-import InputFormField from "../components/InputFormField";
-import { showContext } from "../App";
-import { add_user_to_local_storage } from "../utils/addUserToLocalStorage";
+} from "../../utils/validatoin";
+import InputFormField from "../../components/InputFormField";
+import { showContext } from "../../App";
+import { update_user } from "../../utils/addUserToLocalStorage";
 
-// handel the register form submit event
-export default function RegisterPage() {
+export default function EditDetails({ UserDetails, sendUpdatedUser }) {
   const setShowPage = useContext(showContext);
-  const [userInfo, setUserInfo] = useState({
-    username: "",
-    email: "",
-    birthday: "",
-    password: "",
-    confirmPassword: "",
-    userImage: "",
-    firstName: "",
-    lastName: "",
-    city: "",
-    roadName: "",
-    houseNumber: "",
-  });
+  const [userInfo, setUserInfo] = useState(UserDetails);
 
-  const registerUser = (event) => {
+  const editUser = (event) => {
     event.preventDefault();
     try {
-      add_user_to_local_storage(userInfo);
-      setShowPage("login");
-      event.target.clear();
+      update_user(userInfo);
+      sendUpdatedUser(userInfo);
     } catch (error) {
       console.log(error.message);
     }
@@ -125,15 +111,6 @@ export default function RegisterPage() {
       required: true,
     },
     {
-      id: 7,
-      name: "email",
-      type: "email",
-      label: "Email",
-      required: true,
-      errorFunction: (value) => emailValidation(value),
-      startIcon: <EmailIcon />,
-    },
-    {
       id: 8,
       name: "birthday",
       type: "date",
@@ -148,7 +125,6 @@ export default function RegisterPage() {
       label: "City",
       autoCompleteList: ["גת", "באקה", "חדרה", "חריש", "חיפה"],
       listId: "cites",
-      required: true,
       startIcon: <ApartmentIcon />,
     },
     {
@@ -191,7 +167,7 @@ export default function RegisterPage() {
             borderRadius: "5px",
             backgroundColor: "rgba(250,250,250,0.7)",
           }}
-          onSubmit={registerUser}
+          onSubmit={editUser}
         >
           <Typography variant="h4" align="center">
             Register page
@@ -217,6 +193,7 @@ export default function RegisterPage() {
                   sendUpdatedValues={(value) =>
                     setUserInfo((prev) => ({ ...prev, ...value }))
                   }
+                  userToEdit={userInfo}
                 />
               </Grid>
             ))}

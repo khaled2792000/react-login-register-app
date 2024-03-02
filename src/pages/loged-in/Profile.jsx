@@ -4,7 +4,10 @@ import { Button, Paper } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CakeIcon from "@mui/icons-material/Cake";
+import { showContext } from "../../App";
 export default function Profile() {
+  const setShowPage = useContext(showContext);
+
   const [userLogedIn, setUserLogedIn] = useState(
     JSON.parse(sessionStorage.getItem("user"))
   );
@@ -102,7 +105,9 @@ export default function Profile() {
               </div>
             </Paper>
           )}
-          {/* {userLogedIn.type == "admin" && <SystemAdmin />} */}
+          {userLogedIn.username == "admin" && (
+            <SystemAdmin setShowPage={setShowPage} />
+          )}
         </>
       )}
     </>
