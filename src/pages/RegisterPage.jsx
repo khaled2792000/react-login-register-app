@@ -53,10 +53,15 @@ export default function RegisterPage() {
 
   const registerUser = (event) => {
     event.preventDefault();
+    const data = new FormData(event.target);
+    const adjusted_data = Object.fromEntries(data.entries());
+    adjusted_data.userImage = URL.createObjectURL(adjusted_data.userImage);
     try {
-      add_user_to_local_storage(userInfo);
+      console.log(adjusted_data);
+      add_user_to_local_storage(adjusted_data);
       setShowPage("login");
-      event.target.clear();
+      event.target.reset();
+      setUserInfo(null);
     } catch (error) {
       console.log(error.message);
     }
@@ -183,7 +188,6 @@ export default function RegisterPage() {
         }}
       >
         <form
-          action=""
           style={{
             width: "800px",
             boxShadow: "0 0 10px black",

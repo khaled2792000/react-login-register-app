@@ -15,7 +15,8 @@ export const loadUsers = () => {
 };
 
 function App() {
-  const [showPage, setShowPage] = useState("login");
+  const getLoginUser = JSON.parse(sessionStorage.getItem("user"));
+  const [showPage, setShowPage] = useState(getLoginUser ? "profile" : "login");
 
   useEffect(() => {
     // clear the session storage

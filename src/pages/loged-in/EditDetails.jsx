@@ -31,11 +31,9 @@ import {
   userNameValidation,
 } from "../../utils/validatoin";
 import InputFormField from "../../components/InputFormField";
-import { showContext } from "../../App";
 import { update_user } from "../../utils/addUserToLocalStorage";
 
 export default function EditDetails({ UserDetails, sendUpdatedUser }) {
-  const setShowPage = useContext(showContext);
   const [userInfo, setUserInfo] = useState(UserDetails);
 
   const editUser = (event) => {
@@ -170,7 +168,7 @@ export default function EditDetails({ UserDetails, sendUpdatedUser }) {
           onSubmit={editUser}
         >
           <Typography variant="h4" align="center">
-            Register page
+            Update user
           </Typography>
           <br />
           <br />
@@ -204,21 +202,8 @@ export default function EditDetails({ UserDetails, sendUpdatedUser }) {
                 variant="contained"
                 fullWidth={true}
               >
-                Sign up
+                Update user
               </Button>
-              <Typography variant="caption">
-                I have an account{" "}
-                <span
-                  style={{
-                    color: "#1976d2",
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setShowPage("login")}
-                >
-                  Sign in
-                </span>
-              </Typography>
             </Grid>
           </Grid>
         </form>

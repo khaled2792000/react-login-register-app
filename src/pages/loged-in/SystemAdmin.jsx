@@ -10,6 +10,7 @@ import {
   Paper,
   Typography,
   IconButton,
+  Avatar,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -19,7 +20,7 @@ import EditDetails from "./EditDetails";
 
 export default function SystemAdmin({ setShowPage }) {
   const [userToEdit, setUserToEdit] = useState(null);
-  const [showEdit, setShowEdit] = useState(false);
+  const [showEditPage, setShowEditPage] = useState(false);
   const [users, setUsers] = useState(
     loadUsers().filter((user) => user.username != "admin")
   );
@@ -46,8 +47,13 @@ export default function SystemAdmin({ setShowPage }) {
       )
     );
     setUserToEdit(null);
+    setShowEditPage(false);
   }
-
+  function stringAvatar(name) {
+    return {
+      children: name[0],
+    };
+  }
   return (
     <>
       <Paper
@@ -81,15 +87,21 @@ export default function SystemAdmin({ setShowPage }) {
                     <TableRow key={user.email}>
                       <TableCell>
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <img
-                            src={user.userImage}
-                            alt=""
-                            onError={(e) => {
-                              e.target.src =
-                                "https://avataaars.io/?avatarStyle=Circle&topType=ShortHairShortFlat&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light";
+                          <div
+                            className="profile-image"
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
                             }}
-                            style={{ width: "40px", height: "40px" }}
-                          />
+                          >
+                            <Avatar
+                              sx={{
+                                backgroundColor: "skyblue",
+                              }}
+                              src={user.userImage}
+                              {...stringAvatar(user.username)}
+                            ></Avatar>
+                          </div>
                           <p style={{ marginLeft: "10px" }}>{user.username}</p>
                         </div>
                       </TableCell>
@@ -110,8 +122,9 @@ export default function SystemAdmin({ setShowPage }) {
                         >
                           <IconButton
                             onClick={() => {
-                              setShowEdit((prev) => !prev);
+                              // setShowEdit((prev) => !prev);
                               setUserToEdit(user);
+                              setShowEditPage((prev) => !prev);
                             }}
                             color="primary"
                           >
@@ -142,7 +155,7 @@ export default function SystemAdmin({ setShowPage }) {
           </Button>
         </div>
       </Paper>
-      {showEdit && (
+      {showEditPage && (
         <EditDetails UserDetails={userToEdit} sendUpdatedUser={updateList} />
       )}
     </>

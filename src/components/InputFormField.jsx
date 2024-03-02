@@ -17,7 +17,6 @@ export default function InputFormField({
   userToEdit,
 }) {
   const [fieldState, setFieldState] = useState(params);
-  const [isAdmin, setIsAdmin] = useState(false);
   const handleOnChange = (event, input) => {
     sendUpdatedValues({ [input.name]: event.target.value });
     if (errorFunction) {
@@ -37,10 +36,14 @@ export default function InputFormField({
       });
     }
   };
-
+  function blobToFile(theBlob, fileName) {
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    theBlob.lastModifiedDate = new Date();
+    theBlob.name = fileName;
+    return theBlob;
+  }
   const handleOnChangeAutoComplete = (event, value, input) => {
     sendUpdatedValues({ [input.name]: value });
-    console.log(event.target);
     if (errorFunction) {
       const message = errorFunction(value, userPassword);
       // Update the specific input field if the function gets one par it will not crash it fixed for checking the password confirmation
@@ -84,12 +87,15 @@ export default function InputFormField({
         <Autocomplete
           fullWidth={true}
           id={fieldState.name}
+          name={fieldState.name}
+          defaultValue={userToEdit && userToEdit[fieldState.name]}
           options={fieldState.autoCompleteList}
           onChange={(event, value) =>
             handleOnChangeAutoComplete(event, value, fieldState)
           }
           renderInput={(params) => (
             <TextField
+              name={fieldState.name}
               {...params}
               error={
                 fieldState.errorMessage == " " ||
@@ -114,6 +120,7 @@ export default function InputFormField({
                 ? false
                 : true
             }
+            name={fieldState.name}
             required={fieldState.required}
             onChange={(event) => handleOnChange(event, fieldState)}
             onFocus={(event) => handleOnChange(event, fieldState)}
@@ -121,7 +128,11 @@ export default function InputFormField({
             variant="outlined"
             helperText={fieldState.errorMessage ?? " "}
             placeholder={fieldState.label}
-            defaultValue={userToEdit && userToEdit[fieldState.name]}
+            defaultValue={
+              userToEdit && fieldState.type != "file"
+                ? userToEdit[fieldState.name]
+                : null
+            }
             InputProps={{
               endAdornment: fieldState.endIconButton && (
                 <InputAdornment position="end">
