@@ -13,6 +13,7 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
 import {
   JustPositiveNumber,
+  fileTypeValidation,
   ageRangeValidation,
   confirmPasswordValidList,
   emailValidation,
@@ -105,6 +106,7 @@ export default function RegisterPage() {
       type: "file",
       accept: "image/jpg,image/jpeg",
       label: "Upload your Image",
+      errorFunction: (value) => fileTypeValidation(value),
       startIcon: " ",
     },
     {

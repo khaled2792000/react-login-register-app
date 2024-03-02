@@ -63,3 +63,11 @@ export const JustPositiveNumber = (input) => {
     }
     return ' ';
 };
+
+
+export const fileTypeValidation = (value) => {
+    const extinction = value.split('.').pop()
+    if (extinction != 'jpeg' && extinction != 'jpg')
+        return 'File type incorrect use just jpg and jpeg'
+    return ' ';
+}

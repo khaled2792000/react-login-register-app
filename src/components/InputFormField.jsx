@@ -134,6 +134,7 @@ export default function InputFormField({
                 : null
             }
             InputProps={{
+              accept: fieldState.accept,
               endAdornment: fieldState.endIconButton && (
                 <InputAdornment position="end">
                   <IconButton
