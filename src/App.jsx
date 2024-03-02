@@ -15,9 +15,11 @@ export const loadUsers = () => {
 };
 
 function App() {
+  // get the user that is in the system if the user is not loged in still in login page if not go tp profile
   const getLoginUser = JSON.parse(sessionStorage.getItem("user"));
+  // this used as context for showing the pages
   const [showPage, setShowPage] = useState(getLoginUser ? "profile" : "login");
-
+  // load the admin to the local storage if no users in it
   useEffect(() => {
     const users = loadUsers();
     (users == null || users.length == 0) &&

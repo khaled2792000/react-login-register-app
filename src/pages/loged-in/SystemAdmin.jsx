@@ -20,16 +20,20 @@ import EditDetails from "./EditDetails";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 export default function SystemAdmin({ setShowPage }) {
+  // used for holding the user to edit values to show as default in the form
   const [userToEdit, setUserToEdit] = useState(null);
+  // show the edit component or not
   const [showEditPage, setShowEditPage] = useState(false);
+  // set the users list ot all the users except the admin to map it in the screen
   const [users, setUsers] = useState(
     loadUsers().filter((user) => user.username != "admin")
   );
-
+  // logout user by clearing session storage
   const logoutUser = () => {
     sessionStorage.clear();
     setShowPage("login");
   };
+  // update the users list to map it again
   function updateList(updatedValues) {
     const allTheUserWithoutTargetUser = users.filter(
       (user) => user.email != updatedValues.email
@@ -38,6 +42,7 @@ export default function SystemAdmin({ setShowPage }) {
     setShowEditPage(false);
     setUsers([...allTheUserWithoutTargetUser, updatedValues]);
   }
+  // delete the user for the list
   function deleteUser(userToDelete) {
     const allTheUserWithoutTargetUser = users.filter(
       (user) => user.email != userToDelete.email
@@ -63,6 +68,7 @@ export default function SystemAdmin({ setShowPage }) {
     setUserToEdit(null);
     setShowEditPage(false);
   }
+  // used for the avatar if no image or error loading then the first char of the username
   function stringAvatar(name) {
     return {
       children: name[0],
