@@ -75,6 +75,7 @@ export default function SystemAdmin({ setShowPage }) {
           padding: "20px",
           borderRadius: "10px",
           backgroundColor: "#f0f0f0",
+          margin: 20,
         }}
       >
         <div>
