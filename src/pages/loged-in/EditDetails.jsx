@@ -38,9 +38,23 @@ export default function EditDetails({ UserDetails, sendUpdatedUser }) {
 
   const editUser = (event) => {
     event.preventDefault();
+    const data = new FormData(event.target);
+    const imageFile = Object.fromEntries(data.entries()).userImage;
     try {
-      update_user(userInfo);
-      sendUpdatedUser(userInfo);
+      update_user({
+        ...userInfo,
+        userImage:
+          imageFile.size == 0
+            ? UserDetails.userImage
+            : URL.createObjectURL(imageFile),
+      });
+      sendUpdatedUser({
+        ...userInfo,
+        userImage:
+          imageFile.size == 0
+            ? UserDetails.userImage
+            : URL.createObjectURL(imageFile),
+      });
     } catch (error) {
       console.log(error.message);
     }
