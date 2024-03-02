@@ -19,8 +19,6 @@ function App() {
   const [showPage, setShowPage] = useState(getLoginUser ? "profile" : "login");
 
   useEffect(() => {
-    // clear the session storage
-    // sessionStorage.clear();
     const users = loadUsers();
     (users == null || users.length == 0) &&
       localStorage.setItem(
