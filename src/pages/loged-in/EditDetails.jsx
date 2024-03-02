@@ -8,6 +8,8 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import {
   Autocomplete,
   Box,
@@ -55,8 +57,17 @@ export default function EditDetails({ UserDetails, sendUpdatedUser }) {
             ? UserDetails.userImage
             : URL.createObjectURL(imageFile),
       });
+      withReactContent(Swal).fire({
+        title: "Success",
+        text: "The user has been edited",
+        icon: "success",
+      });
     } catch (error) {
-      console.log(error.message);
+      withReactContent(Swal).fire({
+        title: "Failed",
+        text: error.message,
+        icon: "error",
+      });
     }
   };
   // inputs state for the inputs in the page used for the validation and the rendering
@@ -161,67 +172,69 @@ export default function EditDetails({ UserDetails, sendUpdatedUser }) {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <form
-          action=""
-          style={{
-            width: "800px",
-            boxShadow: "0 0 10px black",
-            padding: "50px",
-            borderRadius: "5px",
-            backgroundColor: "rgba(250,250,250,0.7)",
+      {UserDetails && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
           }}
-          onSubmit={editUser}
         >
-          <Typography variant="h4" align="center">
-            Update user
-          </Typography>
-          <br />
-          <br />
-          <Grid container spacing={2}>
-            {inputs.map((elm) => (
-              <Grid
-                item
-                xs={12}
-                md={4}
-                key={elm.id}
-                flex={true}
-                flexDirection={"column"}
-                justifyContent={"center"}
-              >
-                {" "}
-                <InputFormField
-                  params={elm}
-                  errorFunction={elm.errorFunction}
-                  userPassword={userInfo.password}
-                  sendUpdatedValues={(value) =>
-                    setUserInfo((prev) => ({ ...prev, ...value }))
-                  }
-                  userToEdit={userInfo}
-                />
+          <form
+            action=""
+            style={{
+              width: "800px",
+              boxShadow: "0 0 10px black",
+              padding: "50px",
+              borderRadius: "5px",
+              backgroundColor: "rgba(250,250,250,0.7)",
+            }}
+            onSubmit={editUser}
+          >
+            <Typography variant="h4" align="center">
+              Update user
+            </Typography>
+            <br />
+            <br />
+            <Grid container spacing={2}>
+              {inputs.map((elm) => (
+                <Grid
+                  item
+                  xs={12}
+                  md={4}
+                  key={elm.id}
+                  flex={true}
+                  flexDirection={"column"}
+                  justifyContent={"center"}
+                >
+                  {" "}
+                  <InputFormField
+                    params={elm}
+                    errorFunction={elm.errorFunction}
+                    userPassword={userInfo.password}
+                    sendUpdatedValues={(value) =>
+                      setUserInfo((prev) => ({ ...prev, ...value }))
+                    }
+                    userToEdit={userInfo}
+                  />
+                </Grid>
+              ))}
+              <Grid item xs={12}>
+                <Button
+                  type="submit"
+                  color="primary"
+                  variant="contained"
+                  fullWidth={true}
+                >
+                  Update user
+                </Button>
               </Grid>
-            ))}
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                fullWidth={true}
-              >
-                Update user
-              </Button>
             </Grid>
-          </Grid>
-        </form>
-      </Box>
+          </form>
+        </Box>
+      )}
     </>
   );
 }

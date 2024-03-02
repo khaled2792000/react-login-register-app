@@ -7,6 +7,8 @@ import { passwordValidation, userNameValidation } from "../utils/validatoin";
 import InputFormField from "../components/InputFormField";
 import { showContext } from "../App";
 import { load_user_session } from "../utils/loadUserSesion";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 export default function LoginPage() {
   const setShowPage = useContext(showContext);
@@ -21,7 +23,11 @@ export default function LoginPage() {
       load_user_session(userInfo);
       setShowPage("profile");
     } catch (error) {
-      console.log(error.message);
+      withReactContent(Swal).fire({
+        title: "Failed",
+        text: error.message,
+        icon: "error",
+      });
     }
     event.target.reset();
   };

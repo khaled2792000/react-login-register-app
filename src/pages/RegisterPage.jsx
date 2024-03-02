@@ -8,6 +8,8 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import {
   Autocomplete,
   Box,
@@ -58,11 +60,20 @@ export default function RegisterPage() {
     adjusted_data.userImage = URL.createObjectURL(adjusted_data.userImage);
     try {
       add_user_to_local_storage(adjusted_data);
+      withReactContent(Swal).fire({
+        title: "Added user successfully ",
+        text: adjusted_data.username + " added successfully to the users list",
+        icon: "success",
+      });
       setShowPage("login");
       event.target.reset();
       setUserInfo(null);
     } catch (error) {
-      console.log(error.message);
+      withReactContent(Swal).fire({
+        title: "Try again",
+        text: error.message,
+        icon: "error",
+      });
     }
   };
   // inputs state for the inputs in the page used for the validation and the rendering

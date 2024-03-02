@@ -17,7 +17,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { loadUsers, showContext } from "../../App";
 import EditDetails from "./EditDetails";
-
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 export default function SystemAdmin({ setShowPage }) {
   const [userToEdit, setUserToEdit] = useState(null);
   const [showEditPage, setShowEditPage] = useState(false);
@@ -34,6 +35,7 @@ export default function SystemAdmin({ setShowPage }) {
       (user) => user.email != updatedValues.email
     );
     setUserToEdit(null);
+    setShowEditPage(false);
     setUsers([...allTheUserWithoutTargetUser, updatedValues]);
   }
   function deleteUser(userToDelete) {
@@ -53,6 +55,11 @@ export default function SystemAdmin({ setShowPage }) {
         (user) => user.username != "admin"
       )
     );
+    withReactContent(Swal).fire({
+      title: "Success",
+      text: "The user has been deleted",
+      icon: "success",
+    });
     setUserToEdit(null);
     setShowEditPage(false);
   }
