@@ -54,7 +54,6 @@ export const hebrewValidation = (roadName) => {
 };
 
 export const confirmPasswordValidList = (pass, confirmPass) => {
-    console.log(confirmPass, pass)
     return confirmPass !== pass ? "Ensure it matches the password" : ' ';
 };
 

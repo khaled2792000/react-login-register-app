@@ -57,7 +57,6 @@ export default function RegisterPage() {
     const adjusted_data = Object.fromEntries(data.entries());
     adjusted_data.userImage = URL.createObjectURL(adjusted_data.userImage);
     try {
-      console.log(adjusted_data);
       add_user_to_local_storage(adjusted_data);
       setShowPage("login");
       event.target.reset();

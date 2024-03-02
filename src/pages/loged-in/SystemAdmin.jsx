@@ -37,9 +37,16 @@ export default function SystemAdmin({ setShowPage }) {
     setUsers([...allTheUserWithoutTargetUser, updatedValues]);
   }
   function deleteUser(userToDelete) {
-    const remainingData = JSON.stringify(
-      users.filter((user) => user.username != userToDelete.username)
+    const allTheUserWithoutTargetUser = users.filter(
+      (user) => user.email != userToDelete.email
     );
+    const remainingData = JSON.stringify([
+      ...allTheUserWithoutTargetUser,
+      {
+        username: "admin",
+        password: "ad12343211ad",
+      },
+    ]);
     localStorage.setItem("users", remainingData);
     setUsers(
       JSON.parse(localStorage.getItem("users")).filter(
