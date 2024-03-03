@@ -17,8 +17,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { loadUsers } from "../../App";
 import EditDetails from "./EditDetails";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import { toast } from "sonner";
 export default function SystemAdmin({ setShowPage }) {
   // used for holding the user to edit values to show as default in the form
   const [userToEdit, setUserToEdit] = useState(null);
@@ -60,11 +59,7 @@ export default function SystemAdmin({ setShowPage }) {
         (user) => user.username != "admin"
       )
     );
-    withReactContent(Swal).fire({
-      title: "Success",
-      text: "The user has been deleted",
-      icon: "success",
-    });
+    toast.success("The user has been deleted");
     setUserToEdit(null);
     setShowEditPage(false);
   }

@@ -3,6 +3,7 @@ import RegisterPage from "./pages/Register";
 import "./App.css";
 import LoginPage from "./pages/Login";
 import Profile from "./pages/loged-in/Profile";
+import { Toaster } from "sonner";
 export const showContext = createContext();
 
 // function that get he users array from the local storage if there are not users then return empty array
@@ -40,6 +41,7 @@ function App() {
         {showPage === "login" && <LoginPage />}
         {showPage === "profile" && <Profile />}
       </showContext.Provider>
+      <Toaster expand={true} richColors />
     </>
   );
 }

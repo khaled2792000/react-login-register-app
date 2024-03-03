@@ -1,15 +1,14 @@
 import PersonIcon from "@mui/icons-material/Person";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Button, Grid, Stack, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { passwordValidation, userNameValidation } from "../utils/validatoin";
 import InputFormField from "../components/InputFormField";
 import { showContext } from "../App";
 import { load_user_session } from "../utils/loadUserSesion";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-
+import { toast } from "sonner";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 export default function LoginPage() {
   const setShowPage = useContext(showContext);
   const [userInfo, setUserInfo] = useState({
@@ -23,11 +22,7 @@ export default function LoginPage() {
       load_user_session(userInfo);
       setShowPage("profile");
     } catch (error) {
-      withReactContent(Swal).fire({
-        title: "Failed",
-        text: error.message,
-        icon: "error",
-      });
+      toast.error(error.message);
     }
     event.target.reset();
   };
@@ -68,7 +63,7 @@ export default function LoginPage() {
         <form
           action=""
           style={{
-            width: "800px",
+            width: "500px",
             boxShadow: "0 0 10px black",
             padding: "50px",
             borderRadius: "5px",
@@ -76,9 +71,21 @@ export default function LoginPage() {
           }}
           onSubmit={loginUser}
         >
-          <Typography variant="h4" align="center">
-            Login page
-          </Typography>
+          <Stack direction={"row"} gap={2} alignItems={"center"}>
+            <Avatar
+              align="center"
+              style={{
+                width: 60,
+                height: 60,
+                backgroundColor: "skyblue",
+              }}
+            >
+              <LockOpenIcon />
+            </Avatar>
+            <Typography variant="h4" fontWeight={600} align="center">
+              Login page
+            </Typography>
+          </Stack>
           <br />
           <br />
           <Grid container spacing={2}>

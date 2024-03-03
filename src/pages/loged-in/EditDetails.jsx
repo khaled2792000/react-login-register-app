@@ -7,16 +7,12 @@ import EditRoadIcon from "@mui/icons-material/EditRoad";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
 import {
   JustPositiveNumber,
   ageRangeValidation,
   confirmPasswordValidList,
-  emailValidation,
   hebrewValidation,
   nameStringValidation,
   passwordValidation,
@@ -24,6 +20,7 @@ import {
 } from "../../utils/validatoin";
 import InputFormField from "../../components/InputFormField";
 import { update_user } from "../../utils/addUserToLocalStorage";
+import { toast } from "sonner";
 
 export default function EditDetails({ UserDetails, sendUpdatedUser }) {
   const [userInfo, setUserInfo] = useState(UserDetails);
@@ -47,17 +44,9 @@ export default function EditDetails({ UserDetails, sendUpdatedUser }) {
             ? UserDetails.userImage
             : URL.createObjectURL(imageFile),
       });
-      withReactContent(Swal).fire({
-        title: "Success",
-        text: "The user has been edited",
-        icon: "success",
-      });
+      toast.success("The user has been edited");
     } catch (error) {
-      withReactContent(Swal).fire({
-        title: "Failed",
-        text: error.message,
-        icon: "error",
-      });
+      toast.error(error.message);
     }
   };
   // inputs state for the inputs in the page used for the validation and the rendering

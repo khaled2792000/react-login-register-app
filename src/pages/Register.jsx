@@ -7,9 +7,7 @@ import EditRoadIcon from "@mui/icons-material/EditRoad";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Button, Grid, Stack, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
 import {
   JustPositiveNumber,
@@ -25,6 +23,7 @@ import {
 import InputFormField from "../components/InputFormField";
 import { showContext } from "../App";
 import { add_user_to_local_storage } from "../utils/addUserToLocalStorage";
+import { toast } from "sonner";
 
 // handel the register form submit event
 export default function RegisterPage() {
@@ -50,20 +49,15 @@ export default function RegisterPage() {
     adjusted_data.userImage = URL.createObjectURL(adjusted_data.userImage);
     try {
       add_user_to_local_storage(adjusted_data);
-      withReactContent(Swal).fire({
-        title: "Added user successfully ",
-        text: adjusted_data.username + " added successfully to the users list",
-        icon: "success",
-      });
+      toast.success(
+        adjusted_data.username + " added successfully to the users list"
+      );
+
       setShowPage("login");
       event.target.reset();
       setUserInfo(null);
     } catch (error) {
-      withReactContent(Swal).fire({
-        title: "Try again",
-        text: error.message,
-        icon: "error",
-      });
+      toast.error(error.message);
     }
   };
   // inputs state for the inputs in the page used for the validation and the rendering
@@ -198,9 +192,21 @@ export default function RegisterPage() {
           }}
           onSubmit={registerUser}
         >
-          <Typography variant="h4" align="center">
-            Register page
-          </Typography>
+          <Stack direction={"row"} gap={2} alignItems={"center"}>
+            <Avatar
+              align="center"
+              style={{
+                width: 60,
+                height: 60,
+                backgroundColor: "skyblue",
+              }}
+            >
+              <VpnKeyIcon />
+            </Avatar>
+            <Typography variant="h4" fontWeight={600} align="center">
+              Register page
+            </Typography>
+          </Stack>
           <br />
           <br />
           <Grid container spacing={2}>
